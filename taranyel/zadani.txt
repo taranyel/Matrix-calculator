@@ -1,0 +1,44 @@
+ ---popis zadání   
+    
+    Zadáním mé semestrální práce je maticová kalkulačka. Aplikace také umožní vkládat matice do proměnných 
+a následně je používat ve výrazech. Implementuji to jako interaktivní (konzolovou) aplikaci (uživatel zadává do konzole příkazy
+nebo výrazy, které následně aplikace zpracuje a vytvoří nějaký výstup). Příkazy jsou obsaženy v konfiguračním souboru,
+který se v případě jakéhokoli problému s ním, vytvoří a naplní znovu. Příkazy jsou úloženy ve třídě Commmands.
+Příkazy jsou: HELP - výpiše napovědu, DELETE - smaže proměnnou, EXIT - ukončí program, EXPORT - exportuje proměnné do souboru,
+IMPORT - importuje proměnné ze souboru, PRINT - výpiše proměnnou, SCAN - přečte proměnnou ze standardního vstupu, = - vyhodnotí výraz.
+
+    Kalkulačka zvládne následující operace:  sčítání (+), odčítání (-), násobení (MUL), transpozice (TRANS), sloučení (ADD),
+oříznutí (TRIM) matic, výpočet inverzní matice (INV) pro čtvercové matice, výpočet determinantu (DET), určení hodnosti (RANK) 
+a provedení Gaussovy eliminační metody (GAUSS) (přivedení matrice do trojúhelníkového tvaru). 
+
+    Všechny operátory jsou uloženy ve třídě Operators. Stav kalkulačky (tedy její proměnné) je možné uložit do souboru
+v textově čitelné formě. Stejně tak je potom možné tento stav ze souboru obnovit. Pro zapisování výrazů využijí postfixový zápis,
+má tu výhodu, že nevyžaduje závorky a snáze se zpracováva. Kalkulačka detekuje chyby a nesprávné vstupy. Také třída Evaluate
+se používá pro počítání výrazů a jejich validaci.
+
+    Princip činnosti: nejprve třída CheckConfiguration zkontroluje a ověří konfigurační soubor, poté se třída Input přečte 
+a zvaliduje příkaz nebo výraz zadaný uživatelem ze standardního vstupu, příkaz se zpracuje ve třídě Execute a odpověď se zobrazí
+na standardním výstupu. Třída Error slouží pro výpis připadných chyb. Třída ReadOperand se používá ke čtení matice nebo čísla 
+z vyrovnávací paměti, třída Import se používá k implementaci importu dat ze souboru, stejně třída Export se používá k implementaci
+exportu dat do souboru.
+
+    Třída Operand se používá k implementaci operandu (táto třída funguje jako rozhraní pro typ operand), kterým může být číslo nebo matice.
+Taky rozlišují řídké, a husté matice, oni jsou uloženi v paměti jinak. Třida DenseMatrix reprezentije husté matice, 
+SparseMatrix - řidké matice. Třida Number reprezentije číslo. SparseMatrix a DenseMatrix dědi třídu Matrix 
+(táto třída funguje jako rozhraní pro typ matice).
+
+    Mám samostatnou třídní strukturu pro implementaci operátorů. Pro operátory je hlavním rozhraním třída Operátor.
+je zděděna všemi ostatními operátory. Operatory jsou třídy: Determinant, GaussMethod, Inversion, Merging, Minus, Multiplying, 
+Plus, Rank, Transposition, Trimming. 
+
+
+---popis polimorfizmu
+
+Polymorfismus je vyjádřen hlavně v operandech a operátorech. Operandy, jako je matice a číslo, zdědí třídu Operand. Táto třída má
+takové virtuální funkce jako: print(ostream &stream) - výpiše operand na výstupní stream, clear() - vyčistí operand, getType() - vratí 
+typ operandu, getValue() - vratí hodnotu operandu. Třída Operand je vytvořena pro sjednocení typu operandu. Taky SparseMatrix a DenseMatrix
+dědi třídu Matrix (táto třída funguje jako rozhraní pro typ matice). Hlavním smyslem tohoto polymorfismu je, že různé matice jsou 
+v paměti uloženy různě, v závislosti na počtu nenulových prvků matice.
+
+Všechny operátory kalkulačky zdědí abstraktní třídu Operator. Má hlavní virtuální funkce evaluate(), která je v každé operátorské 
+třídě implementována odlišně v závislosti na operátorovi. Toto dokaže snadno sjednotit typ operator do jednoho interfejsu.
